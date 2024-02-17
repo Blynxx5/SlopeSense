@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slopesense/pages/home.dart';
+import 'package:slopesense/pages/Home.dart';
 
 void main() {
   runApp(const MyApp());

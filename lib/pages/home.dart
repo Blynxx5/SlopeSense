@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'Login.dart';
 import 'dart:convert';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -107,6 +109,11 @@ class _HomePageState extends State<HomePage> {
       leading: GestureDetector(
         onTap: () {
           // Add your action here
+          //This will change page to the Login page
+            // Navigator.push(
+            // //   context,
+            // //   MaterialPageRoute(builder: (context) => Login()),
+            // );
         },
         child: Container(
           margin: EdgeInsets.all(10),
