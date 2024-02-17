@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "734001807995",
+    "project_id": "fyp-slopesense",
+    "storage_bucket": "fyp-slopesense.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:734001807995:android:0ae482e232484025f818de",
+        "android_client_info": {
+          "package_name": "com.example.slopesense"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDej1ZHLyOvXMnj2lkpOwVz1Wd3rTBjs5w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
