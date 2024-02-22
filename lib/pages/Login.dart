@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:slopesense/pages/Home.dart';
-import 'package:slopesense/pages/SignUp.dart'; 
+import 'package:slopesense/pages/SignUp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -23,6 +24,43 @@ class _LoginBodyState extends State<LoginBody> {
   String email = '';
   String password = '';
 
+  Future<void> signIn() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // If login is successful, navigate to the HomePage
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+      print('Login successful: ${userCredential.user?.email}');
+    } on FirebaseAuthException catch (e) {
+      // If login fails, handle the exception.
+      print('Login failed: ${e.message}');
+
+            showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Email or password is incorrect'),
+            content: Text('Please try again'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the alert
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +74,7 @@ class _LoginBodyState extends State<LoginBody> {
           },
           decoration: InputDecoration(
             hintText: 'Email',
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.email),
           ),
         ),
         SizedBox(height: 20),
@@ -54,27 +92,11 @@ class _LoginBodyState extends State<LoginBody> {
         ),
         SizedBox(height: 20),
         ElevatedButton(
-          onPressed: () {
-            // Perform login or save data logic here
-             print('Email: $email');
-             print('Password: $password');
-
-            
-            // Check if username and password are valid, then navigate to the HomePage
-            if (isValidLogin(email, password)) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()), // Replace SecondPage with the desired page
-              );
-            } else {
-              // Handle invalid login
-              print('Invalid login');
-            }
-          },
+          onPressed: signIn,
           child: Text('Login'),
         ),
 
- SizedBox(height: 20),
+        SizedBox(height: 20),
         TextButton(
           onPressed: () {
             // Navigate to the sign-up page
@@ -86,14 +108,7 @@ class _LoginBodyState extends State<LoginBody> {
           },
           child: Text("Don't have an account? Sign up"),
         ),
-
       ],
     );
-  }
-    // Example function to check if login is valid (replace with your logic)
-  bool isValidLogin(String username, String password) {
-    // Add your login validation logic here
-    // For demonstration purposes, accept any non-empty username and password
-    return username.isNotEmpty && password.isNotEmpty;
   }
 }
