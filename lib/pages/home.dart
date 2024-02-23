@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
@@ -80,6 +78,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           // Display specific weather data
+          if(weatherData.containsKey('temperature'))
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
