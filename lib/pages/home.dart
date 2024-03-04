@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'Login.dart';
 import 'dart:convert';
 import 'package:slopesense/pages/location.dart';
 
@@ -83,7 +84,8 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 20),
           // Display specific weather data
           if(weatherData.containsKey('temperature'))
-          GestureDetector(
+
+          GstureDetector(
             onTap: (){
               Navigator.push(
            context,
@@ -128,6 +130,26 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
+              
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Temperature: ${weatherData['temperature']}°C',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  'Wind Speed: ${weatherData['wind_speed']} m/s',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  'Wind Direction: ${weatherData['wind_dir']}',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
+
             ),
           ),
         ),
