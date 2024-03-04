@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
           // Display specific weather data
           if(weatherData.containsKey('temperature'))
 
-          GstureDetector(
+          GestureDetector(
             onTap: (){
               Navigator.push(
            context,
@@ -130,30 +130,10 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-              
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Temperature: ${weatherData['temperature']}°C',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  'Wind Speed: ${weatherData['wind_speed']} m/s',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  'Wind Direction: ${weatherData['wind_dir']}',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
-
             ),
           ),
-        ),
-      ],
+        ),  
+        ],
       ),
     );
   }
