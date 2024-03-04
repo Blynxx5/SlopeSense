@@ -1,7 +1,11 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:slopesense/pages/location.dart';
+
 
 
 class HomePage extends StatefulWidget {
@@ -76,28 +80,59 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          //adding distancd between the seach box container and the weather data container
+          SizedBox(height: 20),
           // Display specific weather data
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Temperature: ${weatherData['temperature']}°C',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  'Wind Speed: ${weatherData['wind_speed']} m/s',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  'Wind Direction: ${weatherData['wind_dir']}',
-                  style: TextStyle(fontSize: 18),
-                ),
-              ],
+          if(weatherData.containsKey('temperature'))
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+           context,
+              MaterialPageRoute(builder: (context) => const LocationPage()), // Replace YourNewPage with the actual widget for the new page
+              );
+            },
+          child: Container(
+            color: Colors.amber,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Row(
+                children:  [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Temperature: ${weatherData['temperature']}°C',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        'Wind Speed: ${weatherData['wind_speed']} m/s',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        'Wind Direction: ${weatherData['wind_dir']}',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  //creating space between the two columns
+                  SizedBox(width: 20),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        onPressed:(){
+                          print('hello');
+                        }, 
+                        child: Icon(Icons.add),
+                        ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
-        ],
+        ),
+      ],
       ),
     );
   }
