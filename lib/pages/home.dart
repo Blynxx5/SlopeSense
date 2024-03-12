@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
            context,
               MaterialPageRoute(
-                builder: (context) =>  LocationPage(weatherData: weatherData)), // Replace YourNewPage with the actual widget for the new page
+                builder: (context) =>  LocationPage(weatherData: weatherData)), 
               );
             },
           child: Container(
