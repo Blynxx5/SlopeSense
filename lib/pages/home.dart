@@ -32,6 +32,9 @@ class _HomePageState extends State<HomePage> {
             'temperature': jsonData['current']['temperature'],
             'wind_speed': jsonData['current']['wind_speed'],
             'wind_dir': jsonData['current']['wind_dir'],
+            'name': jsonData['location']['name'],
+            'lon': jsonData['location']['lon'],
+            'lat': jsonData['location']['lat'],
           };
         });
       } else {
@@ -89,7 +92,8 @@ class _HomePageState extends State<HomePage> {
             onTap: (){
               Navigator.push(
            context,
-              MaterialPageRoute(builder: (context) => const LocationPage()), // Replace YourNewPage with the actual widget for the new page
+              MaterialPageRoute(
+                builder: (context) =>  LocationPage(weatherData: weatherData)), // Replace YourNewPage with the actual widget for the new page
               );
             },
           child: Container(
@@ -140,7 +144,7 @@ class _HomePageState extends State<HomePage> {
 
   AppBar appBar() {
     return AppBar(
-      title: Text('Home Page'),
+      title: Text('SlopeSense'),
       leading: GestureDetector(
         onTap: () {
           // Add your action here
