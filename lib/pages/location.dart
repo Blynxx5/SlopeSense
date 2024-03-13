@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPage extends StatelessWidget {
@@ -48,13 +50,33 @@ class LocationPage extends StatelessWidget {
               ),
               markers: {
                 Marker(
-                  markerId: MarkerId('locationMarker'),
+                  markerId: MarkerId('locationMaerrker'),
                   position: LatLng(latitude, longitude),
                   infoWindow: InfoWindow(title: '${weatherData['name']}'),
                 ),
               },
             ),
           ),
+        
+        Expanded(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed:(){
+                      print('hello');
+                    }, 
+                    style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40),
+                    ),
+                    child: Icon(Icons.add),
+                    ),
+                  SizedBox(height: 150),
+                ],
+              ),
+          ),
+        )
         ],
       ),
     );
