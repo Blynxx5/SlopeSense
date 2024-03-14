@@ -15,31 +15,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  // Maps to allows for holding of both current and forecasted weather:
   Map<String, dynamic> weatherData = {};
+  Map<String, dynamic> forecastWeather = {};
 
   bool shouldShowSuggestions = false;
 
-  //allows me to change the state of the search box when clicking on a suggested value
+  // Allows me to change the state of the search box when clicking on a suggested value
   final TextEditingController controller = TextEditingController();
 
+/*
+
+    Fetch Weather function
+      the following function fetched the current weather for the inputted value
+
+      the following funciton also fetches the forecasted weather for the inputted value
+
+  This is then available to the other pages to use this data how they want
+
+*/
   Future<void> fetchWeather(String location) async {
     final apiKey = 'c0a6cdd6c865202f7a7b2a57f7cbc944';
-    final url = Uri.parse(
+    final urlCurrent = Uri.parse(
         'http://api.weatherstack.com/current?access_key=$apiKey&query=$location');
 
+    final urlForecast = Uri.parse(
+        'http://api.weatherstack.com/forecast?access_key=$apiKey&query=$location&forecast_days=7'); // Corrected endpoint
+
     try {
-      final response = await http.get(url);
+      final response = await http.get(urlCurrent);
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
+        final jsonData1 = json.decode(response.body);
         // Update the state with specific weather data
         setState(() {
           weatherData = {
-            'temperature': jsonData['current']['temperature'],
-            'wind_speed': jsonData['current']['wind_speed'],
-            'wind_dir': jsonData['current']['wind_dir'],
-            'name': jsonData['location']['name'],
-            'lon': jsonData['location']['lon'],
-            'lat': jsonData['location']['lat'],
+            'temperature': jsonData1['current']['temperature'],
+            'wind_speed': jsonData1['current']['wind_speed'],
+            'wind_dir': jsonData1['current']['wind_dir'],
+            'name': jsonData1['location']['name'],
+            'lon': jsonData1['location']['lon'],
+            'lat': jsonData1['location']['lat'],
           };
         });
       } else {
@@ -51,20 +67,69 @@ class _HomePageState extends State<HomePage> {
           };
         });
       }
+
+      final response2 = await http.get(urlForecast);
+      if (response2.statusCode == 200) {
+        final jsonData2 = json.decode(response2.body);
+        // adding the dates of the returned json forecast data to a list
+        final forecastDates = jsonData2['forecast'].keys.toList();
+
+        // List to store forecast data for the first 5 dates
+        List<Map<String, dynamic>> firstFiveForecastData = [];
+
+        for (final date in forecastDates) {
+          final forecastForDate = jsonData2['forecast'][date];
+          final forecastDate = forecastForDate['date'];
+          final maxTemp = forecastForDate['maxtemp'];
+          final minTemp = forecastForDate['mintemp'];
+          final avgTemp = forecastForDate['avgtemp'];
+          final totalSnow = forecastForDate['totalsnow'];
+
+          // Add forecast data to the list
+          firstFiveForecastData.add({
+            'date': forecastDate,
+            'maxtemp': maxTemp,
+            'mintemp': minTemp,
+            'avgtemp': avgTemp,        
+            'totalsnow' : totalSnow,   
+            // Add other forecast data here if needed
+          });
+        }
+
+        // Update the state with specific weather data
+        setState(() {
+          forecastWeather = {
+            'data': firstFiveForecastData,
+          };
+        });
+      } else {
+        // Handle errors
+        setState(() {
+          forecastWeather = {
+            'error':
+                'Failed to fetch weather data. Status code: ${response2.statusCode}'
+          };
+        });
+      }
     } catch (e) {
       // Handle exceptions
       setState(() {
         weatherData = {'error': 'Exception during request: $e'};
       });
+      setState(() {
+        forecastWeather = {'error': '$e'};
+      });
     }
   }
+
+
 
   /*
       Making the list from the csv file to use for our suggestions
       in the typeahead field function
    */
 
-    List<String> getSuggestions(String query) {
+  List<String> getSuggestions(String query) {
     List<String> suggestions = [];
 
     // Read the CSV file and split its content into lines
@@ -164,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          LocationPage(weatherData: weatherData)),
+                          LocationPage(weatherData: weatherData, forecastWeather: forecastWeather,)),
                 );
               },
               child: Container(
@@ -197,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              print('hello');
+                              print(forecastWeather);
                             },
                             child: Icon(Icons.add),
                           ),
