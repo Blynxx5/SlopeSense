@@ -74,8 +74,8 @@ class _HomePageState extends State<HomePage> {
         // adding the dates of the returned json forecast data to a list
         final forecastDates = jsonData2['forecast'].keys.toList();
 
-        // List to store forecast data for the first 5 dates
-        List<Map<String, dynamic>> firstFiveForecastData = [];
+        // List to store forecast data for the first 7 dates
+        List<Map<String, dynamic>> first7ForecastData = [];
 
         for (final date in forecastDates) {
           final forecastForDate = jsonData2['forecast'][date];
@@ -86,12 +86,12 @@ class _HomePageState extends State<HomePage> {
           final totalSnow = forecastForDate['totalsnow'];
 
           // Add forecast data to the list
-          firstFiveForecastData.add({
+          first7ForecastData.add({
             'date': forecastDate,
             'maxtemp': maxTemp,
             'mintemp': minTemp,
             'avgtemp': avgTemp,        
-            'totalsnow' : totalSnow,   
+            'totalsnow' : totalSnow,
             // Add other forecast data here if needed
           });
         }
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
         // Update the state with specific weather data
         setState(() {
           forecastWeather = {
-            'data': firstFiveForecastData,
+            'data': first7ForecastData,
           };
         });
       } else {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -22,6 +23,7 @@ class LocationPage extends StatelessWidget {
     List<String> minTemps = [];
     List<String> maxTemps = [];
     List<String> avgTemps = [];
+    List<String> totalSnows = [];
 
     List<dynamic> forecastData = forecastWeather['data'] as List<dynamic>;
 
@@ -29,6 +31,18 @@ class LocationPage extends StatelessWidget {
       DateTime dateTime = DateTime.parse(data['date']);
       String dayString = DateFormat('EEEE').format(dateTime);
       dates.add(dayString);
+
+      String minTemp = data['mintemp'].toString();
+      minTemps.add(minTemp);
+
+      String maxTemp = data['maxtemp'].toString();
+      maxTemps.add(maxTemp);
+
+      String avgTemp = data['avgtemp'].toString();
+      avgTemps.add(avgTemp);
+
+      String totalSnow = data['totalsnow'].toString();
+      totalSnows.add(totalSnow);
     }
 
     double latitude, longitude;
@@ -44,12 +58,10 @@ class LocationPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent.shade100,
         title: Text('${weatherData['name']}'),
       ),
       body: SingleChildScrollView(
         child: Container(
-          color: Colors.blueAccent.shade100,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -89,20 +101,50 @@ class LocationPage extends StatelessWidget {
                   itemCount: dates.length,
                   itemBuilder: (context, index) {
                     return ListTile(
+                      contentPadding: EdgeInsets.symmetric(vertical: 8.0),
                       title: Row(
-                        mainAxisAlignment: MainAxisAlignment
-                            .spaceEvenly, // Adjust MainAxisAlignment as needed
                         children: [
-                          Column(
-                            children: [
-                              Text('${dates[index]}'),
-                            ],
+                          SizedBox(width: 8.0),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text('${dates[index]}'),
+                              ],
+                            ),
                           ),
-                          Column(
-                            children: [
-                              Icon(Icons.add),
-                            ],
+                          SizedBox(width: 8.0),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${totalSnows[index]}',
+                                ),
+                                SizedBox(width: 8.0),
+                                Icon(
+                                  Icons.ac_unit,
+                                  color: Colors.blue,
+                                  size: 24,
+                                ),
+                              ],
+                            ),
                           ),
+                          SizedBox(width: 8.0),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text('${maxTemps[index]}'),
+                                SizedBox(width: 8.0),
+                                Text(
+                                  '${minTemps[index]}',
+                                  style: TextStyle(color: Colors.grey),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 8.0),
                         ],
                       ),
                     );
