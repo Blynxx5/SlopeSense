@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
+import 'package:slopesense/pages/favourites.dart';
 import 'dart:convert';
 import 'package:slopesense/pages/location.dart';
 import 'dart:io';
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Maps to allows for holding of both current and forecasted weather:
   Map<String, dynamic> weatherData = {};
@@ -90,8 +92,8 @@ class _HomePageState extends State<HomePage> {
             'date': forecastDate,
             'maxtemp': maxTemp,
             'mintemp': minTemp,
-            'avgtemp': avgTemp,        
-            'totalsnow' : totalSnow,
+            'avgtemp': avgTemp,
+            'totalsnow': totalSnow,
             // Add other forecast data here if needed
           });
         }
@@ -121,8 +123,6 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
-
-
 
   /*
       Making the list from the csv file to use for our suggestions
@@ -159,7 +159,47 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: appBar(),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Navigation',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.favorite),
+              title: Text('Favourites'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Favourites(
+
+                          )),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () {
+                // Handle the tap
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Container(
@@ -228,8 +268,10 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          LocationPage(weatherData: weatherData, forecastWeather: forecastWeather,)),
+                      builder: (context) => LocationPage(
+                            weatherData: weatherData,
+                            forecastWeather: forecastWeather,
+                          )),
                 );
               },
               child: Container(
@@ -278,47 +320,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  TextField suggestResort() {
-    return TextField(
-      onSubmitted: (value) {
-        // Trigger weather data fetching when the user submits the search
-        fetchWeather(value);
-      },
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.grey[200], // Background color
-        hintText: 'Search...',
-        hintStyle: TextStyle(color: Colors.grey), // Hint text color
-        prefixIcon: Icon(Icons.search, color: Colors.grey), // Search icon
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(25.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(25.0),
-        ),
-        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      ),
-    );
-  }
-
   AppBar appBar() {
     return AppBar(
       title: Text('SlopeSense'),
       leading: GestureDetector(
         onTap: () {
-          // Add your action here
-          //This will change page to the Login page
-          // Navigator.push(
-          // //   context,
-          // //   MaterialPageRoute(builder: (context) => Login()),
-          // );
+          // Code to open drawer
+          _scaffoldKey.currentState?.openDrawer();
         },
         child: Container(
           margin: EdgeInsets.all(10),
           child: SvgPicture.asset(
-            'assets/icons/chevron-left-svgrepo-com.svg',
+            'assets/icons/list-svgrepo-com.svg',
           ),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -326,23 +339,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      actions: [
-        GestureDetector(
-          onTap: () {
-            // Add your action here
-          },
-          child: Container(
-            margin: EdgeInsets.all(10),
-            child: SvgPicture.asset(
-              'assets/icons/list-svgrepo-com.svg',
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
+
 class LocationPage extends StatelessWidget {
   final Map<String, dynamic> weatherData;
   final Map<String, dynamic> forecastWeather;
@@ -16,6 +17,8 @@ class LocationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     String latitudeString = weatherData['lat'] ?? '0.0';
     String longitudeString = weatherData['lon'] ?? '0.0';
+
+    String locationName;
 
     // Creating lists to hold the days of each element in the data map
     // adding this data and converting it to a string, to represent the day e.g. Tuesday
@@ -76,8 +79,9 @@ class LocationPage extends StatelessWidget {
                 child: GoogleMap(
                   initialCameraPosition: CameraPosition(
                     target: LatLng(latitude, longitude),
-                    zoom: 10,
+                    zoom: 13,
                   ),
+                  mapType: MapType.terrain,
                   markers: {
                     Marker(
                       markerId: MarkerId('locationMarker'),
@@ -119,7 +123,7 @@ class LocationPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${totalSnows[index]}',
+                                  '${totalSnows[index]} %',
                                 ),
                                 SizedBox(width: 8.0),
                                 Icon(
@@ -156,7 +160,9 @@ class LocationPage extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      print('hello');
+                      //saves the name of the location that is in the app bar, this is to be later used in the favourites page:
+                     locationName = '${weatherData['name']}';
+                     print(locationName);
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
@@ -164,7 +170,7 @@ class LocationPage extends StatelessWidget {
                     ),
                     child: Icon(Icons.add),
                   ),
-                  SizedBox(height: 150),
+                  SizedBox(height: 100),
                 ],
               ),
             ],
