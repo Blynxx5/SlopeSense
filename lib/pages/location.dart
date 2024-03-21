@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-
+import 'package:slopesense/models/global_favourites.dart';
 
 class LocationPage extends StatelessWidget {
   final Map<String, dynamic> weatherData;
@@ -161,8 +161,15 @@ class LocationPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       //saves the name of the location that is in the app bar, this is to be later used in the favourites page:
-                     locationName = '${weatherData['name']}';
-                     print(locationName);
+                      if (!GlobalFavouites()
+                          .locationNames
+                          .contains('${weatherData['name']}')) {
+                        GlobalFavouites()
+                            .locationNames
+                            .add('${weatherData['name']}');
+                      }
+                      print(GlobalFavouites()
+                          .locationNames); // To verify it's saved
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(

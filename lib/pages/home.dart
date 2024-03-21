@@ -156,6 +156,19 @@ class _HomePageState extends State<HomePage> {
     return suggestions;
   }
 
+  void handleFavoriteSelection(String location) {
+    fetchWeather(location);
+    // Navigate to LocationPage with the fetched data
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => LocationPage(
+                weatherData: weatherData,
+                forecastWeather: forecastWeather,
+              )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,9 +197,10 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Favourites(
-
-                          )),
+                    builder: (context) => Favourites(
+                      onLocationSelected: handleFavoriteSelection,
+                    ),
+                  ),
                 );
               },
             ),
