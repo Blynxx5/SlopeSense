@@ -175,43 +175,47 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       appBar: appBar(),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Navigation',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+        child: Container(
+          color: Color(0xB3FFFFFF), // Apply the background color here
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors
+                      .transparent, // Make the header transparent to inherit the container's color
+                ),
+                child: Text(
+                  'Navigation',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                  ),
                 ),
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.favorite),
-              title: Text('Favourites'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Favourites(
-                      onLocationSelected: handleFavoriteSelection,
+              ListTile(
+                leading: Icon(Icons.favorite),
+                title: Text('Favourites'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Favourites(
+                        onLocationSelected: handleFavoriteSelection,
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-              onTap: () {
-                // Handle the tap
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+                onTap: () {
+                  // Handle the tap
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: Column(
@@ -289,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               child: Container(
-                color: Colors.amber,
+                color: Colors.blue,
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Row(
@@ -313,17 +317,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                       //creating space between the two columns
                       SizedBox(width: 20),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              print(forecastWeather);
-                            },
-                            child: Icon(Icons.add),
-                          ),
-                        ],
-                      )
                     ],
                   ),
                 ),
