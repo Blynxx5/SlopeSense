@@ -11,7 +11,9 @@ class Favourites extends StatelessWidget {
     List<String> locationNames = GlobalFavouites().locationNames;
 
     return Scaffold(
+      backgroundColor: Color(0xFFC0DEE5),
       appBar: AppBar(
+        backgroundColor: Color(0xFFC0DEE5),
         title: Text('Favourites'),
       ),
       body: locationNames.isEmpty

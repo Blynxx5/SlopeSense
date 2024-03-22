@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
+import 'package:slopesense/pages/Login.dart';
 import 'package:slopesense/pages/favourites.dart';
 import 'dart:convert';
 import 'package:slopesense/pages/location.dart';
@@ -58,6 +59,7 @@ class _HomePageState extends State<HomePage> {
             'name': jsonData1['location']['name'],
             'lon': jsonData1['location']['lon'],
             'lat': jsonData1['location']['lat'],
+            'country': jsonData1['location']['country'],
           };
         });
       } else {
@@ -172,6 +174,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFC0DEE5),
       key: _scaffoldKey,
       appBar: appBar(),
       drawer: Drawer(
@@ -182,8 +185,8 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors
-                      .transparent, // Make the header transparent to inherit the container's color
+                  color: Color(
+                      0xFFC0DEE5), // Make the header transparent to inherit the container's color
                 ),
                 child: Text(
                   'Navigation',
@@ -208,10 +211,15 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Settings'),
+                leading: Icon(Icons.logout),
+                title: Text('Log Out'),
                 onTap: () {
-                  // Handle the tap
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()),
+                    (Route<dynamic> route) =>
+                        false, // Remove all routes beneath the LoginPage
+                  );
                 },
               ),
             ],
@@ -292,31 +300,48 @@ class _HomePageState extends State<HomePage> {
                           )),
                 );
               },
-              child: Container(
-                color: Colors.blue,
+              child: Card(
+                color: Colors.lightBlue[
+                    50], // A lighter shade of blue for the background
+                elevation: 4.0, // Adds a subtle shadow
+                margin:
+                    const EdgeInsets.all(20.0), // Adds margin around the card
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Row(
                     children: [
+                      SizedBox(width: 10), // Space between the icon and text
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Temperature: ${weatherData['temperature']}°C',
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color:
+                                  Colors.blueGrey[900], // Darker color for text
+                              fontWeight: FontWeight.bold, // Makes text bold
+                            ),
                           ),
+                          SizedBox(height: 8), // Space between text items
                           Text(
                             'Wind Speed: ${weatherData['wind_speed']} m/s',
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.blueGrey[
+                                  600], // Slightly lighter color for less important info
+                            ),
                           ),
+                          SizedBox(height: 8),
                           Text(
                             'Wind Direction: ${weatherData['wind_dir']}',
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.blueGrey[600],
+                            ),
                           ),
                         ],
                       ),
-                      //creating space between the two columns
-                      SizedBox(width: 20),
                     ],
                   ),
                 ),
@@ -330,6 +355,7 @@ class _HomePageState extends State<HomePage> {
   AppBar appBar() {
     return AppBar(
       title: Text('SlopeSense'),
+      backgroundColor: Color(0xFFC0DEE5),
       leading: GestureDetector(
         onTap: () {
           // Code to open drawer
@@ -341,7 +367,7 @@ class _HomePageState extends State<HomePage> {
             'assets/icons/list-svgrepo-com.svg',
           ),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Color(0xFFC0DEE5),
             borderRadius: BorderRadius.circular(10),
           ),
         ),

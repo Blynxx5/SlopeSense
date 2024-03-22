@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:slopesense/models/global_favourites.dart';
+import 'package:slopesense/pages/full_screen_map.dart';
 
 class LocationPage extends StatelessWidget {
   final Map<String, dynamic> weatherData;
@@ -18,7 +19,6 @@ class LocationPage extends StatelessWidget {
     String latitudeString = weatherData['lat'] ?? '0.0';
     String longitudeString = weatherData['lon'] ?? '0.0';
 
-    String locationName;
 
     // Creating lists to hold the days of each element in the data map
     // adding this data and converting it to a string, to represent the day e.g. Tuesday
@@ -60,7 +60,9 @@ class LocationPage extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Color(0xFFC0DEE5),
       appBar: AppBar(
+        backgroundColor: Color(0xFFC0DEE5),
         title: Text('${weatherData['name']}'),
       ),
       body: SingleChildScrollView(
@@ -81,7 +83,7 @@ class LocationPage extends StatelessWidget {
                     target: LatLng(latitude, longitude),
                     zoom: 13,
                   ),
-                  mapType: MapType.terrain,
+                  mapType: MapType.hybrid,
                   markers: {
                     Marker(
                       markerId: MarkerId('locationMarker'),
@@ -90,6 +92,27 @@ class LocationPage extends StatelessWidget {
                     ),
                   },
                 ),
+              ),
+              SizedBox(width: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(foregroundColor: Colors.black),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FullscreenMapPage(
+                            latitude: latitude,
+                            longitude: longitude,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text('Expand'),
+                  ),
+                ],
               ),
               Container(
                 margin: EdgeInsets.all(20),
@@ -158,7 +181,7 @@ class LocationPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
+                  ElevatedButton(      
                     onPressed: () {
                       //saves the name of the location that is in the app bar, this is to be later used in the favourites page:
                       if (!GlobalFavouites()
@@ -172,6 +195,7 @@ class LocationPage extends StatelessWidget {
                           .locationNames); // To verify it's saved
                     },
                     style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
                           vertical: 25.0, horizontal: 40),
                     ),
