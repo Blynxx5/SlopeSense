@@ -354,7 +354,10 @@ class _HomePageState extends State<HomePage> {
 
   AppBar appBar() {
     return AppBar(
-      title: Text('SlopeSense'),
+              title: Image.asset(
+          '/Users/benlynch/DEV/slopesense/assets/logo/mainLogoClear.png',
+          height: 40, // Adjust the size of the image
+        ),
       backgroundColor: Color(0xFFC0DEE5),
       leading: GestureDetector(
         onTap: () {

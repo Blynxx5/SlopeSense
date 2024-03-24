@@ -5,14 +5,14 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFC0DEE5),
       appBar: AppBar(
-        title: Text('Sign Up Page'),
+        backgroundColor: Color(0xFFC0DEE5),
       ),
       body: SignUpBody(),
     );
   }
 }
-
 
 class SignUpBody extends StatefulWidget {
   @override
@@ -26,25 +26,26 @@ class _SignUpBodyState extends State<SignUpBody> {
 
   Future<void> signUp() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
       // If signup is successful, you can do something here, e.g., navigate to another page.
       print("Sign up successful: ${userCredential.user?.email}");
-            // ignore: use_build_context_synchronously
-            showDialog(
+      // ignore: use_build_context_synchronously
+      showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Sign Up Successful!'),
-            content: Text('You have successfully signed up.'),
+            title: const Text('Sign Up Successful!'),
+            content: const Text('You have successfully signed up.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Close the alert
+                  Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -52,45 +53,95 @@ class _SignUpBodyState extends State<SignUpBody> {
       );
     } on FirebaseAuthException catch (e) {
       // If signup fails, handle the exception.
+      String msg = e.message.toString();
       print("Sign up failed: ${e.message}");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title:
+                Text("Sign Up Failed: $msg"), 
+            content: Text(
+                'Please try again'), 
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment:
+            MainAxisAlignment.start, // Align items to the start of the column
         children: [
-          TextField(
-            controller: emailController,
-            decoration: InputDecoration(
-              labelText: 'Email',
-              icon: Icon(Icons.email),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 30.0), // Add padding at the top for the logo
+            child: Image.asset(
+              '/Users/benlynch/DEV/slopesense/assets/logo/mainLogoClear.png',
+              width: 200,
+              height: 100, // Logo Image
             ),
           ),
-          TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              labelText: 'Name',
-              icon: Icon(Icons.person),
+          const Text(
+            'SlopeSense',
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.normal,
+              color: Colors.black,
             ),
           ),
-          TextField(
-            controller: passwordController,
-            decoration: InputDecoration(
-              labelText: 'Password',
-              icon: Icon(Icons.lock),
-            ),
-            obscureText: true,
+          SizedBox(
+            height: 100,
           ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: signUp,
-            child: Text('Sign up'),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical:
+                    20.0), // Adjust padding for the text fields and space below the text
+            child: Column(
+              children: [
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    icon: Icon(Icons.email),
+                  ),
+                ),
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                    icon: Icon(Icons.person),
+                  ),
+                ),
+                TextField(
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    icon: Icon(Icons.lock),
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: signUp,
+                  child: const Text('Sign up'),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
-  }
+}

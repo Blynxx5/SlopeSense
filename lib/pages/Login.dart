@@ -7,9 +7,8 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login Page'),
-      ),
+      backgroundColor: Color(0xFFC0DEE5),
+      appBar: AppBar(backgroundColor: Color(0xFFC0DEE5),),
       body: LoginBody(),
     );
   }
@@ -26,7 +25,8 @@ class _LoginBodyState extends State<LoginBody> {
 
   Future<void> signIn() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -34,25 +34,25 @@ class _LoginBodyState extends State<LoginBody> {
       // If login is successful, navigate to the HomePage
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
       print('Login successful: ${userCredential.user?.email}');
     } on FirebaseAuthException catch (e) {
       // If login fails, handle the exception.
       print('Login failed: ${e.message}');
 
-            showDialog(
+      showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Email or password is incorrect'),
-            content: Text('Please try again'),
+            title: const Text('Email or password is incorrect'),
+            content: const Text('Please try again'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the alert
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -63,52 +63,81 @@ class _LoginBodyState extends State<LoginBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        TextField(
-          onChanged: (value) {
-            setState(() {
-              email = value;
-            });
-          },
-          decoration: InputDecoration(
-            hintText: 'Email',
-            icon: Icon(Icons.email),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment
+            .start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 30.0),
+            child: Image.asset(
+              '/Users/benlynch/DEV/slopesense/assets/logo/mainLogoClear.png', 
+              width: 200,
+              height: 100, // Logo Image
+            ),
           ),
-        ),
-        SizedBox(height: 20),
-        TextField(
-          onChanged: (value) {
-            setState(() {
-              password = value;
-            });
-          },
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            icon: Icon(Icons.lock),
+          const Text(
+            'SlopeSense',
+            style: TextStyle(
+              fontSize: 30, 
+              fontWeight: FontWeight.normal,
+              color:
+                  Colors.black, 
+            ),
           ),
-        ),
-        SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: signIn,
-          child: Text('Login'),
-        ),
-
-        SizedBox(height: 20),
-        TextButton(
-          onPressed: () {
-            // Navigate to the sign-up page
-            // Replace SignUpPage() with your actual sign-up page class
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SignUpPage()),
-            );
-          },
-          child: Text("Don't have an account? Sign up"),
-        ),
-      ],
+          const SizedBox(
+              height: 100),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+            child: Column(
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    icon: Icon(Icons.email),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      password = value;
+                    });
+                  },
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    icon: Icon(Icons.lock),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: signIn,
+            child: const Text('Login'),
+          ),
+          const SizedBox(height: 20),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignUpPage()),
+              );
+            },
+            child: const Text("Don't have an account? Sign up"),
+          ),
+        ],
+      ),
     );
   }
 }
