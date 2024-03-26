@@ -8,6 +8,8 @@ import 'dart:convert';
 import 'package:slopesense/pages/location.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -126,11 +128,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
+
   /*
       Making the list from the csv file to use for our suggestions
       in the typeahead field function
    */
-
+  
   List<String> getSuggestions(String query) {
     List<String> suggestions = [];
 
@@ -158,7 +162,7 @@ class _HomePageState extends State<HomePage> {
     return suggestions;
   }
 
-  void handleFavoriteSelection(String location) {
+  void  handleFavoriteSelection  (String location) {
     fetchWeather(location);
     // Navigate to LocationPage with the fetched data
     Navigator.push(
@@ -291,6 +295,7 @@ class _HomePageState extends State<HomePage> {
           if (weatherData.containsKey('temperature'))
             GestureDetector(
               onTap: () {
+                 
                 Navigator.push(
                   context,
                   MaterialPageRoute(

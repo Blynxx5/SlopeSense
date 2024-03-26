@@ -5,14 +5,27 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:slopesense/models/global_favourites.dart';
 import 'package:slopesense/pages/full_screen_map.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class LocationPage extends StatelessWidget {
   final Map<String, dynamic> weatherData;
   final Map<String, dynamic> forecastWeather;
 
   const LocationPage(
-      {Key? key, required this.weatherData, required this.forecastWeather})
-      : super(key: key);
+      {Key? key, required this.weatherData, required this.forecastWeather}): super(key: key);
+
+
+Future<void> addFavoriteLocation(String location) async {
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    DocumentReference userDoc = FirebaseFirestore.instance.collection('Favourites').doc(currentUser.uid);
+    await userDoc.update({
+      'Location': FieldValue.arrayUnion([location])
+    });
+  }
+}   
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +41,7 @@ class LocationPage extends StatelessWidget {
     List<String> avgTemps = [];
     List<String> totalSnows = [];
 
-    List<dynamic> forecastData = forecastWeather['data'] as List<dynamic>;
+    List<dynamic> forecastData = forecastWeather['data'] as List<dynamic>? ?? [];
 
     for (var data in forecastData) {
       DateTime dateTime = DateTime.parse(data['date']);
@@ -183,6 +196,7 @@ class LocationPage extends StatelessWidget {
                 children: [
                   ElevatedButton(      
                     onPressed: () {
+                      addFavoriteLocation('${weatherData['name']}');
                       //saves the name of the location that is in the app bar, this is to be later used in the favourites page:
                       if (!GlobalFavouites()
                           .locationNames

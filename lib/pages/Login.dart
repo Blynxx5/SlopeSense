@@ -30,8 +30,6 @@ class _LoginBodyState extends State<LoginBody> {
         email: email,
         password: password,
       );
-
-      // If login is successful, navigate to the HomePage
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -31,9 +32,20 @@ class _SignUpBodyState extends State<SignUpBody> {
         email: emailController.text,
         password: passwordController.text,
       );
-      // If signup is successful, you can do something here, e.g., navigate to another page.
+
+  // Creating a document for the user with the UID as the document ID
+      await FirebaseFirestore.instance
+          .collection('Favourites')
+          .doc(userCredential.user?.uid)
+          .set({
+        // Initialize any data you want to have upon signup, for example:
+        'Location': [],
+        'Email': emailController.text, // Storing email if necessary
+        // 'Name': nameController.text // Storing name if provided
+      });
+      
       print("Sign up successful: ${userCredential.user?.email}");
-      // ignore: use_build_context_synchronously
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -59,10 +71,8 @@ class _SignUpBodyState extends State<SignUpBody> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:
-                Text("Sign Up Failed: $msg"), 
-            content: Text(
-                'Please try again'), 
+            title: Text("Sign Up Failed: $msg"),
+            content: Text('Please try again'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
