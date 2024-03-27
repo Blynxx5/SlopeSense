@@ -128,13 +128,11 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
-
   /*
       Making the list from the csv file to use for our suggestions
       in the typeahead field function
    */
-  
+
   List<String> getSuggestions(String query) {
     List<String> suggestions = [];
 
@@ -162,9 +160,21 @@ class _HomePageState extends State<HomePage> {
     return suggestions;
   }
 
-  void  handleFavoriteSelection  (String location) {
-    fetchWeather(location);
-    // Navigate to LocationPage with the fetched data
+  /*
+
+     Making sure the user is only inputting the values that are in the CSV
+
+   */
+
+  bool isValidSuggestion(String input) {
+    List<String> suggestions = getSuggestions(input);
+
+    suggestions.any((suggestion) => suggestion.toLowerCase() == input.toLowerCase());
+    return suggestions.contains(input);
+  }
+
+  void handleFavoriteSelection(String location) async {
+    await fetchWeather(location);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -260,7 +270,9 @@ class _HomePageState extends State<HomePage> {
                     autofocus: true,
                     onChanged: (text) {
                       setState(() {
+                        // update to show suggestions as the user is typing
                         shouldShowSuggestions = text.isNotEmpty;
+
                       });
                     },
                     decoration: InputDecoration(
@@ -283,8 +295,18 @@ class _HomePageState extends State<HomePage> {
                           EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     ),
                     onSubmitted: (value) {
-                      // Trigger weather data fetching when the user submits the search
-                      fetchWeather(value);
+                      // Trigger weather data fetching when the user submits the search only if the data is in the CSV
+                      if (isValidSuggestion(value)) {
+                        fetchWeather(value);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Please select a valid resort from the suggestions.'),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
                     },
                   );
                 },
@@ -295,7 +317,6 @@ class _HomePageState extends State<HomePage> {
           if (weatherData.containsKey('temperature'))
             GestureDetector(
               onTap: () {
-                 
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -359,10 +380,10 @@ class _HomePageState extends State<HomePage> {
 
   AppBar appBar() {
     return AppBar(
-              title: Image.asset(
-          '/Users/benlynch/DEV/slopesense/assets/logo/mainLogoClear.png',
-          height: 40, // Adjust the size of the image
-        ),
+      title: Image.asset(
+        '/Users/benlynch/DEV/slopesense/assets/logo/mainLogoClear.png',
+        height: 40, // Adjust the size of the image
+      ),
       backgroundColor: Color(0xFFC0DEE5),
       leading: GestureDetector(
         onTap: () {
