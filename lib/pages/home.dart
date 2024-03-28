@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         'http://api.weatherstack.com/current?access_key=$apiKey&query=$location');
 
     final urlForecast = Uri.parse(
-        'http://api.weatherstack.com/forecast?access_key=$apiKey&query=$location&forecast_days=7'); // Corrected endpoint
+        'http://api.weatherstack.com/forecast?access_key=$apiKey&query=$location&forecast_days=7');
 
     try {
       final response = await http.get(urlCurrent);
@@ -317,6 +317,8 @@ class _HomePageState extends State<HomePage> {
           if (weatherData.containsKey('temperature'))
             GestureDetector(
               onTap: () {
+                print(weatherData);
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
